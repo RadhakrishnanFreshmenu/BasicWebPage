@@ -1,24 +1,36 @@
-import logo from './logo.svg';
+import { useState} from 'react';
 import './App.css';
 
 function App() {
+
+  const [text,setText] = useState("");
+
+  const display = async(title) =>
+  {
+    try{
+      const response = await fetch(`/contents/${title}.txt`);
+      const output = await response.text();
+      setText(output)
+    }
+    catch(error)
+    {
+      console.error("Error:",error)
+    }
+  };
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <div className='flex min-h-screen max-h-full'>
+        <div className='flex flex-col w-1/4 bg-gray-300 items-center'>
+          <button type='button' className='bg-red-200 w-fit mt-4 text-xs' onClick={() => display('intro')}>Introduction</button>
+          <button type='button' className='bg-red-200 w-fit mt-4 text-xs' onClick={() => display('basicIdeas')}>Basics of Web design</button>
+          <button type='button' className='bg-red-200 w-fit mt-4 text-xs' onClick={() => display('howToStart')}>How to start</button>
+        </div>
+
+        <div className='flex flex-col w-3/4 bg-gray-700 items-center'>
+          <p className='text-white text-base w-3/4 mt-2'>{text}</p>
+        </div>
+      </div>
   );
 }
 
